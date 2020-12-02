@@ -35,7 +35,15 @@ io.on('connection', socket => {
         socket.emit('message', formatMessage('Chat App admin','Welcome to Chat App!'));
 
         //Broadcast when a user connects'
-        socket.broadcast.to(user.room).emit('message',formatMessage('Chat App admin',`${user.username} has joined the chat`));
+        socket.broadcast.to(user.room).emit(
+            'message',
+            formatMessage('Chat App admin',`${user.username} has joined the chat`
+            ));
+        //Display user & room
+        io.to(user.room).emit('roomUsers',{
+            room: user.room,
+            users: getUsers(user.room)
+        });
     });
 
     
@@ -54,6 +62,12 @@ io.on('connection', socket => {
 
         if(user){
             io.to(user.room).emit('message',formatMessage('Chat App admin', `${user.username} has left the chat`));
+
+        //Display user & room
+        io.to(user.room).emit('roomUsers',{
+            room: user.room,
+            users: getUsers(user.room)
+        });
         }
     });
 
