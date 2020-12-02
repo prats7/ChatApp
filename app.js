@@ -8,8 +8,6 @@ const app = express();
 
 const socketio = require('socket.io');
 
-const port = 5000;
-
 const server = http.createServer(app);
 
 //Socket setup
@@ -81,10 +79,6 @@ io.on('connection', socket => {
 
 });
 
-server.listen(port, function(err){
-    if (err){
-        console.log(`Error in running the server: ${err}`);
-    }
+const PORT = process.env.PORT || 5000;
 
-    console.log(`Server is running on port: ${port}`);
-});
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
