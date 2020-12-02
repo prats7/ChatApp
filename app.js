@@ -12,6 +12,7 @@ const port = 5000;
 
 const server = http.createServer(app);
 
+//Socket setup
 const io = socketio(server);
 
 const formatMessage = require('./service/messages');
@@ -44,6 +45,12 @@ io.on('connection', socket => {
             room: user.room,
             users: getUsers(user.room)
         });
+
+    // Handle typing event
+    socket.on('typing', function(data){
+        socket.broadcast.emit('typing', data);
+    });
+
     });
 
     
