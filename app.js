@@ -14,6 +14,8 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
+const formatMessage = require('./service/messages')
+
 //Set public folder for front-end
 app.use(express.static(path.join(__dirname,'public')));
 
@@ -22,19 +24,19 @@ io.on('connection', socket => {
     console.log('connection established using sockets...!');
 
     //When new user connects
-    socket.emit('message','Welcome to Chat App!');
+    socket.emit('message', formatMessage('Chat App admin','Welcome to Chat App!'));
 
     //Broadcast when a user connects'
-    socket.broadcast.emit('message','A user has joined the chat');
+    socket.broadcast.emit('message',formatMessage('Chat App admin','A user has joined the chat'));
 
     //When user disconnects
     socket.on('disconnect',() =>{
-        io.emit('message', 'A user has left the chat');
+        io.emit('message',formatMessage('Chat App admin', 'A user has left the chat'));
     });
 
     //Listening to chatMessage
     socket.on('chatMessage',msg => {
-        io.emit('message',msg);
+        io.emit('message',formatMessage('USER',msg));
     });
 });
 
